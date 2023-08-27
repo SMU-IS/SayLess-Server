@@ -1,15 +1,59 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+var admin = require("firebase-admin");
+var serviceAccount = require("../KEY.json");
 
-// const admin = require('firebase-admin');
-// const serviceAccount = require('path/to/serviceAccountKey.json'); // Download this from Firebase Console
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: 'https://your-project-id.firebaseio.com'
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://project-is216-9e085-default-rtdb.asia-southeast1.firebasedatabase.app"
+});
+const db = admin.firestore();
 
-// const db = admin.database();
+router.get('/get-food-listings', (req, res) => {
+    const addFoodRef = db.collection('Food');
+    addFoodRef.get()
+      .then((snapshot) => {
+        const formattedListings = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              cardImage: data.cardImage,
+              cardTitle: data.cardTitle,
+              cardSubTitle: data.cardSubTitle,
+              details: data.details,
+              pickUpTime: data.pickUpTime,
+              distance: data.distance
+            };
+          });
+        
+          res.json(formattedListings);
+      })
+      .catch((error) => {
+        res.status(404).send('Resource not found');
+      });
+});
+
+
+router.post('/add-food-listings', (req, res) => {
+    const PostData = req.body;
+    // {
+    //     cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
+    //     cardTitle: 'Potato Chip',
+    //     cardSubTitle: 'John Doe',
+    //     details: 'Expiring in 2 days, collect asap. Message me for more details!',
+    //     pickUpTime: '18:00',
+    //     distance: '3km',
+    // }
+    const addFoodRef = db.collection('Food');
+    addFoodRef.add(PostData)
+      .then((snapshot) => {        
+          res.json("Success");
+      })
+      .catch((error) => {
+        res.status(404).send('Resource not found');
+      });
+});
 
 // Define your API routes
 router.post('/search-recipe', (req, res) => {
