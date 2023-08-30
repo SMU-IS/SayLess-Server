@@ -1,18 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const dotenv = require('dotenv');
-const admin = require('firebase-admin');
-dotenv.config();
-
-const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.DB_URL,
-});
-
-const db = admin.firestore();
+const db = require('@/utils/firebaseConfig');
 
 router.get('/get-food-listings', (req, res) => {
   const addFoodRef = db.collection('Food');
