@@ -4,7 +4,7 @@ const axios = require('axios');
 var http = require('http')
 
 var admin = require("firebase-admin");
-var serviceAccount = require("../KEY.json");
+var serviceAccount = require("../../KEY.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://project-is216-9e085-default-rtdb.asia-southeast1.firebasedatabase.app"

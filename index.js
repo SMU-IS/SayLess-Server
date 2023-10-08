@@ -4,7 +4,7 @@ const https = require('https');
 const express = require('express');
 const app = express();
 const port = 3000; // You can use any port you prefer
-const apiRoutes = require('./routes/api'); // Import your API routes
+const apiRoutes = require('./src/routes/api'); // Import your API routes
 const bodyParser = require('body-parser'); // Import body-parser
 const cors = require('cors');
 app.use(cors({
