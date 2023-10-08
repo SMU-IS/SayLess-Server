@@ -1,5 +1,6 @@
 // index.js (or app.js)
-
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const app = express();
 const port = 3000; // You can use any port you prefer
@@ -15,12 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', apiRoutes); // Use the API routes
-// Define a sample route
-app.get('/', (req, res) => {
-  res.send('Hello, Express!');
-});
-
 // Start the server
-app.listen(port, () => {
+app.listen(3000, () => {
   console.log(`Server is running on port ${port}`);
 });

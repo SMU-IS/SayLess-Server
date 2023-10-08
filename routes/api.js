@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+var http = require('http')
+
 var admin = require("firebase-admin");
 var serviceAccount = require("../KEY.json");
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://project-is216-9e085-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
 const db = admin.firestore();
 
-router.get('/get-food-listings', (req, res) => {
+
+router.get('/get-listing', (req, res) => {
     const addFoodRef = db.collection('Food');
     addFoodRef.get()
       .then((snapshot) => {
@@ -120,37 +122,46 @@ router.post('/get-recipe', (req, res) => {
 });
 
 
-router.get('/get-listing', (req, res) => {
-    const foodListings = [
-        {
-            id: 1,
-            cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
-            cardTitle: 'Potato Chip',
-            cardSubTitle: 'John Doe',
-            details: 'Expiring in 2 days, collect asap. Message me for more details!',
-            pickUpTime: '18:00',
-            distance: '3km',
-        },
-        {
-            id: 2,
-            cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
-            cardTitle: 'Canned Food',
-            cardSubTitle: 'Peter Doe',
-            details: 'Expiring in 14 days, collect asap. Message me for more details!',
-            pickUpTime: '20:00',
-            distance: '1km',
-        },
-        {
-            id: 3,
-            cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
-            cardTitle: 'Sourdough',
-            cardSubTitle: 'David Doebrea',
-            details: 'Expiring in 1 day, collect asap. Message me for more details!',
-            pickUpTime: '21:00',
-            distance: '2km',
-        },
-    ];
-    res.json(foodListings)
-});
+// router.get('/get-listing', (req, res) => {
+//     const foodListings = [
+//         {
+//             id: 1,
+//             cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
+//             cardTitle: 'Potato Chip',
+//             cardSubTitle: 'John Doe',
+//             details: 'Expiring in 2 days, collect asap. Message me for more details!',
+//             pickUpTime: '18:00',
+//             distance: '3km',
+//         },
+//         {
+//             id: 2,
+//             cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
+//             cardTitle: 'Canned Food',
+//             cardSubTitle: 'Peter Doe',
+//             details: 'Expiring in 14 days, collect asap. Message me for more details!',
+//             pickUpTime: '20:00',
+//             distance: '1km',
+//         },
+//         {
+//             id: 3,
+//             cardImage: 'https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg',
+//             cardTitle: 'Sourdough',
+//             cardSubTitle: 'David Doebrea',
+//             details: 'Expiring in 1 day, collect asap. Message me for more details!',
+//             pickUpTime: '21:00',
+//             distance: '2km',
+//         },
+//     ];
+//     res.json(foodListings)
+// });
+
+// const users = require('../src/routes');
+
+// module.exports = (app) => {
+//   app.use('/users', users);
+//   app.use('*', (req, res) => {
+//     res.send('Not found!!!');
+//   });
+// };
 
 module.exports = router;
