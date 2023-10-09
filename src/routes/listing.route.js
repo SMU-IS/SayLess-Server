@@ -1,15 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-
-var admin = require("firebase-admin");
-var serviceAccount = require("../../KEY.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL:
-    "https://project-is216-9e085-default-rtdb.asia-southeast1.firebasedatabase.app",
-});
-const db = admin.firestore();
+const db = require("../utils/firebaseConfig");
 
 router.route("/get-listing").get(function (req, res) {
   const addFoodRef = db.collection("Food");
