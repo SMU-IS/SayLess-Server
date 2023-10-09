@@ -1,22 +1,22 @@
-const express = require('express');
+const express = require("express");
 // IMPORTS
-const listingRoute = require('./listing.route');
-const recipeRoute = require('./recipe.route');
-const questRoute = require('./quest.route');
+const listingRoute = require("./listing.route");
+const recipeRoute = require("./recipe.route");
+const questRoute = require("./quest.route");
 
 const router = express.Router();
 
 const defaultRoutes = [
   {
-    path: '/listing',
+    path: "/listing",
     route: listingRoute,
   },
   {
-    path: '/recipe',
+    path: "/recipe",
     route: recipeRoute,
   },
   {
-    path: '/quest',
+    path: "/quest",
     route: questRoute,
   },
 ];
@@ -24,8 +24,6 @@ const defaultRoutes = [
 defaultRoutes.forEach((route) => {
   router.use(route.path, route.route);
 });
-
-
 
 // router.get('/get-listing', (req, res) => {
 //     const addFoodRef = db.collection('Food');
@@ -43,14 +41,13 @@ defaultRoutes.forEach((route) => {
 //               distance: data.distance
 //             };
 //           });
-        
+
 //           res.json(formattedListings);
 //       })
 //       .catch((error) => {
 //         res.status(404).send('Resource not found');
 //       });
 // });
-
 
 // router.post('/add-food-listings', (req, res) => {
 //     const PostData = req.body;
@@ -64,7 +61,7 @@ defaultRoutes.forEach((route) => {
 //     // }
 //     const addFoodRef = db.collection('Food');
 //     addFoodRef.add(PostData)
-//       .then((snapshot) => {        
+//       .then((snapshot) => {
 //           res.json("Success");
 //       })
 //       .catch((error) => {
@@ -109,7 +106,6 @@ defaultRoutes.forEach((route) => {
 //     // console.log('Received data:', requestData);
 // });
 
-
 // router.post('/get-recipe', (req, res) => {
 //     const requestData = req.body;
 //     const checkField = "rid"
@@ -135,7 +131,6 @@ defaultRoutes.forEach((route) => {
 //         res.status(404).send('Resource not found');
 //     }
 // });
-
 
 // router.get('/get-listing', (req, res) => {
 //     const foodListings = [
