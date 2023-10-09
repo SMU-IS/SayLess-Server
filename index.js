@@ -1,22 +1,41 @@
-// index.js (or app.js)
-const fs = require('fs');
-const https = require('https');
-const express = require('express');
-const app = express();
-const port = 3000; // You can use any port you prefer
-const apiRoutes = require('./src/routes/api'); // Import your API routes
-const bodyParser = require('body-parser'); // Import body-parser
-const cors = require('cors');
-app.use(cors({
-  origin: '*'
-}));
+const mongoose = require('mongoose');
+const app = require('./app');
+const config = require('./src/config/config');
+let server;
 
-// Use body-parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+mongoose.connect(config.mongoose.url,
+  ).then(()=>{
+    console.log('Connected to MongoDB')
+    server = app.listen(config.port, () => {
+      console.log(`Listening to port ${config.port}`)
+      // logger.info(`Listening to port ${config.port}`);
+    });
+});;
 
-app.use('/api', apiRoutes); // Use the API routes
-// Start the server
-app.listen(3000, () => {
-  console.log(`Server is running on port ${port}`);
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      // logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
+
+const unexpectedErrorHandler = (error) => {
+  // logger.error(error);
+  console.log(error)
+  exitHandler();
+};
+
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
+
+process.on('SIGTERM', () => {
+  // logger.info('SIGTERM received');
+  console.log("SIGTERM received")
+  if (server) {
+    server.close();
+  }
 });
