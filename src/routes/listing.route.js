@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const db = require("../utils/firebaseConfig");
+const { Listing } = require("../models");
+const { db } = require("../utils/firebaseConfig");
 
 router.route("/get-listing").get(function (req, res) {
   const addFoodRef = db.collection("Food");
@@ -26,6 +27,52 @@ router.route("/get-listing").get(function (req, res) {
     .catch((error) => {
       res.status(404).send("Resource not found");
     });
+});
+
+const getListings = async () => {
+  return Listing.findById("6522e5db0ca5362ec464a673").exec();
+};
+
+router.route("/test/get").get(async function (req, res) {
+  // const blogFind = await Listing.find({}, function (err, docs){
+  //     if (err){
+  //         console.log(err);
+  //     }else{
+  //         console.log(docs);
+  //     }
+  // });
+  const data = getListings();
+  res.json(data);
+  // Listing.find({id: '123'}, function(err, docs){
+  //     if (err){
+  //         console.log(err);
+  //     }else{
+  //         console.log(docs);
+  //     }
+  // });
+});
+
+// const getListings = async () => {
+//     return Listing.findById("6522e5db0ca5362ec464a673").exec();
+// };
+
+router.route("/test/get").get(async function (req, res) {
+  // const blogFind = await Listing.find({}, function (err, docs){
+  //     if (err){
+  //         console.log(err);
+  //     }else{
+  //         console.log(docs);
+  //     }
+  // });
+  const data = getListings();
+  res.json(data);
+  // Listing.find({id: '123'}, function(err, docs){
+  //     if (err){
+  //         console.log(err);
+  //     }else{
+  //         console.log(docs);
+  //     }
+  // });
 });
 
 router.post("/add-food-listings", (req, res) => {

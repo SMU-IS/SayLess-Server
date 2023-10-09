@@ -1,5 +1,8 @@
-const express = require("express");
+// index.js (or app.js)
 require("./config");
+const fs = require("fs");
+const https = require("https");
+const express = require("express");
 const app = express();
 const port = 3000; // You can use any port you prefer
 const apiRoutes = require("./src/routes/api"); // Import your API routes
@@ -16,12 +19,4 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api", apiRoutes); // Use the API routes
-// Define a sample route
-app.get("/", (req, res) => {
-  res.send("Hello, Express!");
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+module.exports = app;
