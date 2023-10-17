@@ -13,6 +13,7 @@ router.get("/get-quests", (req, res) => {
   const sampleOut = {
     id: 1,
     questID: 1,
+    completed: 3,
     checked: false,
     icon: "https://picsum.photos/200/300",
     content:
