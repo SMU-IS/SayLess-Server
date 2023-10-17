@@ -9,7 +9,15 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
+io.use(function (socket, next) {
+  console.log(socket.handshake.query);
+  if (socket.handshake.query && socket.handshake.query.token) {
+    next();
+    return;
+  }
+  socket._error("error");
+  new Error("AUTH ERROR");
+}).on("connection", (socket) => {
   console.log("a user connected");
   socket.emit("WELCOME");
   socket.on("disconnect", () => {

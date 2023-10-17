@@ -1,3 +1,5 @@
+# START SCRIPT
+*.sh
 # Logs
 logs
 *.log

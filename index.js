@@ -3,6 +3,7 @@ const app = require("./app");
 const messageServer = require("./src/routes/message.route");
 const config = require("./src/config/config");
 let server;
+let socketServer;
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
   console.log("Connected to MongoDB");
@@ -16,19 +17,32 @@ mongoose.connect(process.env.MONGO_DB_URL).then(() => {
 });
 
 const exitHandler = () => {
-  if (server || socketServer) {
-    socketServer.close();
+  if (server) {
     server.close(() => {
-      process.exit(1);
+      console.log("Server closed");
+      if (socketServer) {
+        socketServer.close(() => {
+          console.log("Socket server closed");
+          process.exit(0); // Exit with a success code
+        });
+      } else {
+        process.exit(0); // No socket server to close, just exit with a success code
+      }
     });
   } else {
-    process.exit(1);
+    if (socketServer) {
+      socketServer.close(() => {
+        console.log("Socket server closed");
+        process.exit(0); // Exit with a success code
+      });
+    } else {
+      process.exit(0); // No server or socket server to close, just exit with a success code
+    }
   }
 };
 
 const unexpectedErrorHandler = (error) => {
-  // logger.error(error);
-  console.log(error);
+  console.error(error);
   exitHandler();
 };
 
@@ -36,9 +50,11 @@ process.on("uncaughtException", unexpectedErrorHandler);
 process.on("unhandledRejection", unexpectedErrorHandler);
 
 process.on("SIGTERM", () => {
-  // logger.info('SIGTERM received');
   console.log("SIGTERM received");
-  if (server) {
-    server.close();
-  }
+  exitHandler();
+});
+
+process.on("SIGINT", () => {
+  console.log("Ctrl+C (SIGINT) received");
+  exitHandler();
 });
