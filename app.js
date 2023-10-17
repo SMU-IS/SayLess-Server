@@ -8,6 +8,7 @@ const port = 3000; // You can use any port you prefer
 const apiRoutes = require("./src/routes/api"); // Import your API routes
 const bodyParser = require("body-parser"); // Import body-parser
 const cors = require("cors");
+// const serverMsg = require("./src/routes/message.route");
 app.use(
   cors({
     origin: "*",

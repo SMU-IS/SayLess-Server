@@ -1,20 +1,24 @@
 const mongoose = require("mongoose");
 const app = require("./app");
+const messageServer = require("./src/routes/message.route");
 const config = require("./src/config/config");
 let server;
 
-mongoose.connect(config.mongoose.url).then(() => {
+mongoose.connect(process.env.MONGO_DB_URL).then(() => {
   console.log("Connected to MongoDB");
   server = app.listen(config.port, () => {
     console.log(`Listening to port ${config.port}`);
     // logger.info(`Listening to port ${config.port}`);
   });
+  socketServer = messageServer.listen(8887, () => {
+    console.log("listening on *:8887");
+  });
 });
 
 const exitHandler = () => {
-  if (server) {
+  if (server || socketServer) {
+    socketServer.close();
     server.close(() => {
-      // logger.info('Server closed');
       process.exit(1);
     });
   } else {
