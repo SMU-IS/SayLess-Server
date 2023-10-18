@@ -1,9 +1,13 @@
 const jwt = require("jsonwebtoken");
 
-function generateAccessToken(username) {
+function generateAccessToken(userData) {
+  let { id, email, name, profilePic } = userData;
   return jwt.sign(
     {
-      username: username,
+      id: id,
+      email: email,
+      name: name,
+      profilePic: profilePic,
     },
     process.env.TOKEN_KEY
   );
