@@ -4,6 +4,10 @@ const listingRoute = require("./listing.route");
 const recipeRoute = require("./recipe.route");
 const questRoute = require("./quest.route");
 const authRoute = require("./auth.route");
+const userRoute = require("./user.route");
+
+// SAMPLE DATA
+const sampleRoute = require("./sampledata.route");
 // AUTH
 const auth = require("../middlewares/auth.middleware");
 
@@ -28,6 +32,14 @@ const noSecurityRoutes = [
   {
     path: "/cred",
     route: authRoute,
+  },
+  {
+    path: "/user",
+    route: userRoute,
+  },
+  {
+    path: "/sample",
+    route: sampleRoute,
   },
 ];
 

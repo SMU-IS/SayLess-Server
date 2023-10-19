@@ -3,6 +3,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const verifyToken = require("../middlewares/auth.middleware");
 const io = new Server(server, {
   cors: {
     origin: true,
@@ -10,8 +11,8 @@ const io = new Server(server, {
 });
 
 io.use(function (socket, next) {
-  console.log(socket.handshake.query);
-  if (socket.handshake.query && socket.handshake.query.token) {
+  console.log(socket.handshake);
+  if (socket.handshake.headers) {
     next();
     return;
   }
