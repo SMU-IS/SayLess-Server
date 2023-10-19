@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser"); // Import body-parser
+const cookieParser = require("cookie-parser");
 // CUSTOM IMPORTS
 const apiRoutes = require("./src/routes/api"); // Import your API routes
 app.use(
@@ -17,6 +18,7 @@ app.use(
 // Use body-parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Get Cred
 

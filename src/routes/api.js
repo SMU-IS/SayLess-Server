@@ -26,16 +26,16 @@ const defaultRoutes = [
     path: "/quest",
     route: questRoute,
   },
+  {
+    path: "/user",
+    route: userRoute,
+  },
 ];
 
 const noSecurityRoutes = [
   {
     path: "/cred",
     route: authRoute,
-  },
-  {
-    path: "/user",
-    route: userRoute,
   },
   {
     path: "/sample",

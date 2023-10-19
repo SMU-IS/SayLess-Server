@@ -4,12 +4,13 @@ const { User } = require("../models");
 
 router.post("/get-user", async function (req, res) {
   // Empty `filter` means "match all documents"
-  let filter = {};
-  if (req.body) {
-    filter = {
-      _id: req.body.userId,
-    };
+  if (!req.user._id) {
+    res.sendStatus(500);
+    return;
   }
+  let filter = {
+    _id: req.user._id,
+  };
   await User.findOne(filter).then((response) => {
     res.json(response);
   });
