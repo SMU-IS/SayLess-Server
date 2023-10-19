@@ -3,28 +3,27 @@ const { Schema, SchemaTypes, model } = mongoose;
 const { toJSON } = require("./plugins");
 
 const listingSchema = Schema({
-  id: {
-    type: String,
-    // required: true,
-    // unique: true,
+  listingImages: {
+    type: [String],
   },
-  cardImage: {
+  listingTitle: {
     type: String,
   },
-  cardTitle: {
+  listingDetails: {
     type: String,
   },
-  cardSubTitle: {
+  pickUpLocation: {
     type: String,
   },
-  details: {
-    type: String,
+  isAvailable: {
+    type: Boolean,
   },
-  pickUpTime: {
-    type: String,
+  createdOn: {
+    type: Date,
   },
-  distance: {
-    type: String,
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
   },
 });
 

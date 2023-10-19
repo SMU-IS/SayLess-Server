@@ -17,7 +17,6 @@ router.post("/get-user", async function (req, res) {
 });
 
 router.post("/create-user", async (req, res) => {
-  const filter = {};
   listingData = new User(req.body);
   postStatus = listingData.save();
   res.json(postStatus);
