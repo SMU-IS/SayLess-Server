@@ -10,16 +10,19 @@ router.post("/get-user", async function (req, res) {
       _id: req.body.userId,
     };
   }
-  await User.find(filter).then((response) => {
-    console.log(response);
+  await User.findOne(filter).then((response) => {
     res.json(response);
   });
 });
 
 router.post("/create-user", async (req, res) => {
-  listingData = new User(req.body);
-  postStatus = listingData.save();
-  res.json(postStatus);
+  userData = new User(req.body);
+  try {
+    await userData.save();
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;

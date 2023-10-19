@@ -47,7 +47,7 @@ router.get("/populate-listing-sample", async function (req, res) {
         return;
       });
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   });
 });
@@ -60,7 +60,7 @@ router.get("/populate-user-sample", async function (req, res) {
         return;
       });
     } else {
-      res.send(500);
+      res.sendStatus(500);
     }
   });
 });

@@ -1,16 +1,26 @@
 const jwt = require("jsonwebtoken");
+const { User } = require("../models");
 
-function generateAccessToken(userData) {
-  let { id, email, name, profilePic } = userData;
-  return jwt.sign(
-    {
-      id: id,
-      email: email,
-      name: name,
-      profilePic: profilePic,
-    },
-    process.env.TOKEN_KEY
-  );
+async function generateAccessToken(userId) {
+  let filter = {
+    _id: userId,
+  };
+  var userData = await User.findOne(filter);
+  try {
+    if (userData) {
+      let { _id, userId, email, name, profilePic } = userData;
+      _id = _id.toString();
+      let data = {
+        _id: _id,
+        userId: userId,
+        email: email,
+        name: name,
+        profilePic: profilePic,
+      };
+      return jwt.sign(data, process.env.TOKEN_KEY);
+    }
+  } catch (err) {}
+  return false;
 }
 
 module.exports = { generateAccessToken };
