@@ -29,11 +29,22 @@ router.post("/update-food-listings", async (req, res) => {
     return;
   }
   filter = { _id: req.body.listingId };
+  // PROTECT
   try {
-    data = await Listing.findOneAndUpdate(filter, req.body.updateInfo, {
-      new: true, // Returns updated
-    });
-    res.json(data);
+    await Listing.findOne(filter)
+      .populate("createdBy")
+      .then(async (response) => {
+        console.log(response);
+        let { createdBy } = response;
+        if (createdBy._id.toString() == req.user._id) {
+          data = await Listing.findOneAndUpdate(filter, req.body.updateInfo, {
+            new: true, // Returns updated
+          });
+          res.json(data);
+          return;
+        }
+        res.sendStatus(500);
+      });
   } catch (err) {
     res.sendStatus(500);
   }

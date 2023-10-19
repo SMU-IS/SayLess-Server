@@ -11,6 +11,7 @@ router.post("/get-token", async function (req, res) {
   if (!token) {
     res.sendStatus(500);
   } else {
+    res.cookie("x-access-token", token, { httpOnly: true });
     res.json(token);
   }
 });

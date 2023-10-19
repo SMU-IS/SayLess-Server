@@ -3,7 +3,7 @@ const { User } = require("../models");
 
 async function generateAccessToken(userId) {
   let filter = {
-    _id: userId,
+    userId: userId,
   };
   var userData = await User.findOne(filter);
   try {
