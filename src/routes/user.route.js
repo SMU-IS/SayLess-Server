@@ -17,7 +17,9 @@ router.post("/get-user", async function (req, res) {
 });
 
 router.post("/create-user", async (req, res) => {
-  userData = new User(req.body);
+  let postData = req.body;
+  postData["createdOn"] = new Date();
+  userData = new User(postData);
   try {
     await userData.save();
     res.sendStatus(200);

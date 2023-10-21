@@ -17,6 +17,9 @@ const userSchema = Schema({
   profilePic: {
     type: String,
   },
+  createdOn: {
+    type: Date,
+  },
 });
 
 var handleE11000 = function (error, res, next) {
