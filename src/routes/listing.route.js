@@ -14,7 +14,9 @@ router.route("/get-listing").get(async function (req, res) {
 });
 
 router.post("/add-food-listings", async (req, res) => {
-  listingData = new Listing(req.body);
+  let postData = req.body;
+  postData["createdOn"] = new Date();
+  listingData = new Listing(postData);
   try {
     listingData.save();
     res.sendStatus(200);

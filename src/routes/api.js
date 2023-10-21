@@ -5,6 +5,8 @@ const recipeRoute = require("./recipe.route");
 const questRoute = require("./quest.route");
 const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
+const chatRoomRoute = require("./chatroom.route");
+const chatRoute = require("./chat.route");
 
 // SAMPLE DATA
 const sampleRoute = require("./sampledata.route");
@@ -29,6 +31,14 @@ const defaultRoutes = [
   {
     path: "/user",
     route: userRoute,
+  },
+  {
+    path: "/chatroom",
+    route: chatRoomRoute,
+  },
+  {
+    path: "/chat",
+    route: chatRoute,
   },
 ];
 
