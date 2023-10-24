@@ -83,7 +83,7 @@ function createQuest(req, res) {
 //   return createQuest(req, res);
 // });
 
-router.post("/update-quests", (req, res) => {
+router.post("/update-quests", async (req, res) => {
   if (!req.user && !req.body.completed) {
     return res.sendStatus(500);
   }
@@ -95,17 +95,17 @@ router.post("/update-quests", (req, res) => {
   let postData = {
     $addToSet: { completed: req.body.completed },
   };
-  Quest.findOneAndUpdate(filter, postData).then((response) => {
+  await Quest.findOneAndUpdate(filter, postData).then(async (response) => {
     if (!response) {
       return res.sendStatus(500);
     }
-    Quest.findOne(filter).then((response) => {
-      if (response.completed.length == MAX_QUEST_LENGTH) {
+    await Quest.findOne(filter).then(async (response) => {
+      if (response.completed.length >= MAX_QUEST_LENGTH) {
         // build new quest
         let postData = {
           isActive: false,
         };
-        Quest.findOneAndUpdate(filter, postData).then((response) => {
+        await Quest.findOneAndUpdate(filter, postData).then((response) => {
           return createQuest(req, res);
           // Quest.findOne(filter).then((response) => {
           //   return res.json(response);
