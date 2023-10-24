@@ -8,6 +8,7 @@ router.route("/get-listing").get(async function (req, res) {
   const filter = {};
   await Listing.find()
     .populate("createdBy")
+    .populate("requested")
     .then((response) => {
       res.json(response);
     });
@@ -50,6 +51,27 @@ router.post("/update-food-listings", async (req, res) => {
   } catch (err) {
     res.sendStatus(500);
   }
+});
+
+router.post("/request-food-listings", async (req, res) => {
+  if (!req.user && !req.body.listingId) {
+    return res.sendStatus(500);
+  }
+  let userId = req.user._id;
+  filter = {
+    _id: req.body.listingId,
+  };
+  let postData = {
+    $addToSet: { requested: userId },
+  };
+  await Listing.findOneAndUpdate(filter, postData).then(async () => {
+    await Listing.findOne(filter)
+      .populate("createdBy")
+      .populate("requested")
+      .then((response) => {
+        return res.json(response);
+      });
+  });
 });
 
 module.exports = router;

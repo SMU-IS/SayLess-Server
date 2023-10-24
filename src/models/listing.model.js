@@ -15,6 +15,10 @@ const listingSchema = Schema({
   pickUpLocation: {
     type: String,
   },
+  requested: {
+    type: [Schema.Types.ObjectId],
+    ref: "users",
+  },
   isAvailable: {
     type: Boolean,
   },
