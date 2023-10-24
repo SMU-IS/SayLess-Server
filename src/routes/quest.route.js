@@ -31,7 +31,12 @@ router.get("/get-quests", (req, res) => {
     isActive: true,
   };
   Quest.findOne(filter)
-    .populate("challengeSet")
+    .populate({
+      path: "challengeSet",
+      populate: {
+        path: "challenges",
+      },
+    })
     .then((response) => {
       if (!response) {
         return createQuest(req, res);
