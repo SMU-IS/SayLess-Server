@@ -3,6 +3,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const axios = require("axios");
+const ObjectId = require("mongodb").ObjectId;
 const { Server } = require("socket.io");
 const auth = require("../middlewares/io_auth.middleware");
 const { Chat } = require("../models");
@@ -32,10 +33,12 @@ io.use(auth).on("connection", async (socket) => {
       chatroomId: chatroom,
     };
     socket.join(chatroom);
-    Chat.find(filter).then((response) => {
-      socket.emit("messageData", response);
-      socket.to(chatroom).emit("roomStatus", "A user is connected");
-    });
+    Chat.find(filter)
+      .populate("sender")
+      .then((response) => {
+        socket.emit("messageData", response);
+        socket.to(chatroom).emit("roomStatus", "A user is connected");
+      });
   });
 
   socket.on("disconnect", () => {
@@ -54,8 +57,14 @@ io.use(auth).on("connection", async (socket) => {
     let chatData = new Chat(postData);
     try {
       chatData.save().then((result) => {
-        console.log(result);
-        io.to(chatroom).emit("messageData", result);
+        Chat.find({
+          _id: result._id,
+        })
+          .populate("sender")
+          .then((updatedChat) => {
+            console.log(updatedChat);
+            io.to(chatroom).emit("messageData", updatedChat);
+          });
       });
     } catch (err) {
       socket.emit("error", "Message failed to send");
