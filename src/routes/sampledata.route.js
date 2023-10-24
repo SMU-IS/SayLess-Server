@@ -50,6 +50,7 @@ async function populateChatroomSample() {
   let userData = new Chatroom({
     participants: ["6530d24110a9828679f8858a", "6530e927da6325020804e042"],
     listing: "6530e7fa6c0f66a765d151be",
+    createdOn: new Date(),
   });
   try {
     await userData.save();
