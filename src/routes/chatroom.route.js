@@ -11,9 +11,10 @@ router.get("/get-chatrooms", async function (req, res) {
   filter = {
     participants: { $in: userId },
   };
+  console.log(filter);
   Chatroom.find(filter)
-    .populate("participants")
-    .populate("listing")
+    .lean()
+    .populate("participants", "listing")
     .then((response) => {
       res.json(response);
     });
