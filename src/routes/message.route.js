@@ -53,13 +53,9 @@ io.use(auth).on("connection", async (socket) => {
     };
     let chatData = new Chat(postData);
     try {
-      chatData.save().then(() => {
-        io.to(chatroom).emit("messageData", [
-          {
-            sender: socket.user._id,
-            message: message,
-          },
-        ]);
+      chatData.save().then((result) => {
+        console.log(result);
+        io.to(chatroom).emit("messageData", result);
       });
     } catch (err) {
       socket.emit("error", "Message failed to send");
