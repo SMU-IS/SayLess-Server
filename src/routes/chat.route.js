@@ -10,9 +10,17 @@ router.post("/get-chats", async function (req, res) {
   filter = {
     chatroomId: req.body.chatroomId,
   };
-  Chat.find(filter).then((response) => {
-    res.json(response);
-  });
+  Chat.find(filter)
+    .populate("sender")
+    .then((response) => {
+      res.json(response);
+    });
+  //   Chat.find(filter)
+  //     .lean()
+  //     .populate("sender", "name")
+  //     .then((response) => {
+  //       res.json(response);
+  //     });
 });
 
 router.post("/create-chat", async function (req, res) {
