@@ -28,8 +28,9 @@ router.post("/create-chatrooms", async function (req, res) {
   postData["createdOn"] = new Date();
   let chatroomData = new Chatroom(postData);
   try {
-    chatroomData.save();
-    res.sendStatus(200);
+    chatroomData.save().then((result) => {
+      res.json(result);
+    });
   } catch (err) {
     res.sendStatus(500);
   }
