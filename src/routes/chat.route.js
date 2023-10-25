@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+var ObjectId = require("mongoose").Types.ObjectId;
 const { Chat } = require("../models");
 
 router.post("/get-chats", async function (req, res) {
@@ -37,6 +38,20 @@ router.post("/create-chat", async function (req, res) {
   } catch (err) {
     res.sendStatus(500);
   }
+});
+
+router.post("/read-chat", async function (req, res) {
+  if (!req.user) {
+    res.sendStatus(500);
+    return;
+  }
+  filter = {
+    chatroomId: new ObjectId(req.body.chatroomId),
+    sender: { $ne: req.user._id },
+  };
+  Chat.updateMany(filter, { read: true }, { multi: true }).then((response) => {
+    res.json(response);
+  });
 });
 
 module.exports = router;

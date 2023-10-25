@@ -115,7 +115,6 @@ router.post("/update-quests", async (req, res) => {
     const completedChallenges = response.challengeSet.filter(
       (challenge) => challenge.status === "completed"
     );
-    console.log("completed challenge", completedChallenges);
     if (completedChallenges.length >= MAX_QUEST_LENGTH) {
       // build new quest
       let postData = {
