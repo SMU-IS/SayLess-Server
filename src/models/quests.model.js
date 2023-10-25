@@ -7,13 +7,22 @@ const questSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: "users",
   },
-  completed: {
-    type: [Schema.Types.ObjectId],
-    ref: "challenges",
-  },
+  //   completed: {
+  //     type: [Schema.Types.ObjectId],
+  //     ref: "challenges",
+  //   },
   challengeSet: {
-    type: Schema.Types.ObjectId,
-    ref: "challengesets",
+    type: [
+      {
+        challenge: {
+          type: Schema.Types.ObjectId,
+          ref: "challengesets",
+        },
+        status: {
+          type: String,
+        },
+      },
+    ],
   },
   questIcon: {
     type: String,

@@ -58,15 +58,24 @@ function createQuest(req, res) {
       var random = Math.floor(Math.random() * count);
       ChallengeSet.findOne()
         .skip(random)
+        .populate("challenges")
         .exec()
         .then((result) => {
+          console.log(result);
+          challengeSet = result.challenges;
+          challengeSet = challengeSet.map((obj) => ({
+            challenge: obj,
+            status: "inactive",
+          }));
+          console.log(challengeSet);
           let QuestData = new Quest({
             userId: userId,
-            challengeSet: result.id,
-            completed: [],
+            challengeSet: challengeSet,
             questIcon: imageURL,
             isActive: true,
           });
+          // return res.json(challengeSet);
+
           QuestData.save().then(() => {
             Quest.findOne(filter).then((response) => {
               return res.json(response);
@@ -76,45 +85,48 @@ function createQuest(req, res) {
     });
 }
 
-// router.post("/create-quests", (req, res) => {
-//   if (!req.user && !req.body.completed) {
-//     return res.sendStatus(500);
-//   }
-//   return createQuest(req, res);
-// });
+router.post("/create-quests", (req, res) => {
+  if (!req.user && !req.body.completed) {
+    return res.sendStatus(500);
+  }
+  return createQuest(req, res);
+});
 
 router.post("/update-quests", async (req, res) => {
-  if (!req.user && !req.body.completed) {
+  if (!req.user && !req.body.challengeId) {
     return res.sendStatus(500);
   }
   let userId = req.user._id;
   filter = {
     userId: new ObjectId(userId),
     isActive: true,
+    "challengeSet.challenge": new ObjectId(req.body.challengeId),
   };
   let postData = {
-    $addToSet: { completed: req.body.completed },
+    $set: { "challengeSet.$[element].status": req.body.status },
   };
-  await Quest.findOneAndUpdate(filter, postData).then(async (response) => {
+  await Quest.findOneAndUpdate(filter, postData, {
+    arrayFilters: [{ "element.challenge": req.body.challengeId }],
+    new: true, // Return the updated document
+  }).then(async (response) => {
     if (!response) {
       return res.sendStatus(500);
     }
-    await Quest.findOne(filter).then(async (response) => {
-      if (response.completed.length >= MAX_QUEST_LENGTH) {
-        // build new quest
-        let postData = {
-          isActive: false,
-        };
-        await Quest.findOneAndUpdate(filter, postData).then((response) => {
-          return createQuest(req, res);
-          // Quest.findOne(filter).then((response) => {
-          //   return res.json(response);
-          // });
-        });
-      } else {
-        return res.json(response);
-      }
-    });
+    const completedChallenges = response.challengeSet.filter(
+      (challenge) => challenge.status === "completed"
+    );
+    console.log("completed challenge", completedChallenges);
+    if (completedChallenges.length >= MAX_QUEST_LENGTH) {
+      // build new quest
+      let postData = {
+        isActive: false,
+      };
+      await Quest.findOneAndUpdate(filter, postData).then((response) => {
+        return createQuest(req, res);
+      });
+    } else {
+      return res.json(response);
+    }
   });
 });
 module.exports = router;

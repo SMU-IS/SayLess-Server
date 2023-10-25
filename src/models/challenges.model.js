@@ -6,6 +6,9 @@ const challengesSchema = Schema({
   content: {
     type: String,
   },
+  path: {
+    type: String,
+  },
 });
 
 const challengesSetSchema = Schema({
