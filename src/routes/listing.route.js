@@ -21,8 +21,13 @@ router.post("/add-food-listings", async (req, res) => {
   postData["isAvailable"] = true;
   listingData = new Listing(postData);
   try {
-    listingData.save();
-    res.sendStatus(200);
+    listingData
+      .save({
+        new: true, // Returns updated
+      })
+      .then((response) => {
+        res.json(response);
+      });
   } catch (err) {
     res.sendStatus(500);
   }
