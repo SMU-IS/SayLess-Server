@@ -6,7 +6,11 @@ const { Quest, Challenges, ChallengeSet } = require("../models");
 const MAX_QUEST_LENGTH = 3;
 const imageURL =
   "https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg";
-
+const STATUS = {
+  completed: "Completed",
+  start: "Start",
+  inprogress: "In Progress",
+};
 // router.get("/get-quests", (req, res) => {
 //   const sampleOut = {
 //     id: 1,
@@ -34,7 +38,7 @@ router.get("/get-quests", (req, res) => {
     .populate({
       path: "challengeSet",
       populate: {
-        path: "challenges",
+        path: "challenge",
       },
     })
     .then((response) => {
@@ -65,7 +69,7 @@ function createQuest(req, res) {
           challengeSet = result.challenges;
           challengeSet = challengeSet.map((obj) => ({
             challenge: obj,
-            status: "inactive",
+            status: "Start",
           }));
           console.log(challengeSet);
           let QuestData = new Quest({
@@ -113,7 +117,7 @@ router.post("/update-quests", async (req, res) => {
       return res.sendStatus(500);
     }
     const completedChallenges = response.challengeSet.filter(
-      (challenge) => challenge.status === "completed"
+      (challenge) => challenge.status === STATUS.completed
     );
     if (completedChallenges.length >= MAX_QUEST_LENGTH) {
       // build new quest
