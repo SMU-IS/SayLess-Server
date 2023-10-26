@@ -16,7 +16,9 @@ router.route("/get-listing").get(async function (req, res) {
 
 router.post("/add-food-listings", async (req, res) => {
   let postData = req.body;
+  postData["createdBy"] = req.user._id;
   postData["createdOn"] = new Date();
+  postData["isAvailable"] = true;
   listingData = new Listing(postData);
   try {
     listingData.save();
@@ -31,9 +33,9 @@ router.post("/update-food-listings", async (req, res) => {
     res.sendStatus(500);
     return;
   }
-  filter = { _id: req.body.listingId };
   // PROTECT
   try {
+    filter = { _id: req.body.listingId, createdBy: req.user._id };
     await Listing.findOne(filter)
       .populate("createdBy")
       .then(async (response) => {
