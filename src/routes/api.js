@@ -47,10 +47,10 @@ const noSecurityRoutes = [
     path: "/cred",
     route: authRoute,
   },
-  {
-    path: "/sample",
-    route: sampleRoute,
-  },
+  // {
+  //   path: "/sample",
+  //   route: sampleRoute,
+  // },
 ];
 
 // AUTH ROUTES
