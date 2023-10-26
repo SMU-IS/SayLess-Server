@@ -16,7 +16,7 @@ const questSchema = Schema({
       {
         challenge: {
           type: Schema.Types.ObjectId,
-          ref: "challengesets",
+          ref: "challenges",
         },
         status: {
           type: String,
