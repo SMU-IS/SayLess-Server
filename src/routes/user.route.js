@@ -43,9 +43,13 @@ async function userLogin(req, res) {
       userId: userData.userId,
     };
     await User.findOne(filter).then((response) => {
+      let result = response;
       res.cookie("x-access-token", token, { httpOnly: true });
-      response["x-access-token"] = token;
-      return res.json(response);
+      result.token = token;
+      return res.json({
+        userData: response,
+        "x-access-token": token,
+      });
     });
   }
 }
