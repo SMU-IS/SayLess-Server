@@ -67,6 +67,7 @@ router.post("/update-inventory", async function (req, res) {
   };
   let filter = {
     _id: new ObjectId(req.body.itemId),
+    createdBy: new ObjectId(req.user._id), // Protect - only creator can edit
   };
   Inventory.findOneAndUpdate(filter, postArr, {
     new: true,
