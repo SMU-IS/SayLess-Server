@@ -6,3 +6,4 @@ const { Challenges, ChallengesSet } = require("./challenges.model");
 module.exports.Challenges = Challenges;
 module.exports.ChallengeSet = ChallengesSet;
 module.exports.Quest = require("./quests.model");
+module.exports.Inventory = require("./inventory.model");

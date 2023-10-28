@@ -7,6 +7,7 @@ const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
 const chatRoomRoute = require("./chatroom.route");
 const chatRoute = require("./chat.route");
+const inventoryRoute = require("./inventory.route");
 
 // SAMPLE DATA
 const sampleRoute = require("./sampledata.route");
@@ -35,6 +36,10 @@ const defaultRoutes = [
   {
     path: "/chat",
     route: chatRoute,
+  },
+  {
+    path: "/inventory",
+    route: inventoryRoute,
   },
 ];
 
