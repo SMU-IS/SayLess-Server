@@ -44,6 +44,7 @@ async function userLogin(req, res) {
     };
     await User.findOne(filter).then((response) => {
       res.cookie("x-access-token", token, { httpOnly: true });
+      response["x-access-token"] = token;
       return res.json(response);
     });
   }
