@@ -115,21 +115,23 @@ router.post("/update-quests", async (req, res) => {
   }).then(async (response) => {
     if (!response) {
       return res.sendStatus(500);
-    }
-    const completedChallenges = response.challengeSet.filter(
-      (challenge) => challenge.status === STATUS.completed
-    );
-    if (completedChallenges.length >= MAX_QUEST_LENGTH) {
-      // build new quest
-      let postData = {
-        isActive: false,
-      };
-      await Quest.findOneAndUpdate(filter, postData).then((response) => {
-        return createQuest(req, res);
-      });
     } else {
       return res.json(response);
     }
+    // const completedChallenges = response.challengeSet.filter(
+    //   (challenge) => challenge.status === STATUS.completed
+    // );
+    // if (completedChallenges.length >= MAX_QUEST_LENGTH) {
+    //   // build new quest
+    //   let postData = {
+    //     isActive: false,
+    //   };
+    //   await Quest.findOneAndUpdate(filter, postData).then((response) => {
+    //     return createQuest(req, res);
+    //   });
+    // } else {
+    //   return res.json(response);
+    // }
   });
 });
 module.exports = router;
