@@ -4,6 +4,7 @@ const { User } = require("../models");
 var ObjectId = require("mongoose").Types.ObjectId;
 const { generateAccessToken } = require("../utils/auth");
 const { firebaseValidate } = require("../middlewares/firebaseauth.middleware");
+const { verifyToken } = require("../middlewares/auth.middleware");
 
 // router.post("/get-user", async function (req, res) {
 //   // Empty `filter` means "match all documents"
@@ -38,8 +39,13 @@ async function userLogin(req, res) {
     // ERROR Creating Token
     return res.sendStatus(501);
   } else {
-    res.cookie("x-access-token", token, { httpOnly: true });
-    return res.json(token);
+    let filter = {
+      userId: userData.userId,
+    };
+    await User.findOne(filter).then((response) => {
+      res.cookie("x-access-token", token, { httpOnly: true });
+      return res.json(response);
+    });
   }
 }
 
@@ -83,6 +89,7 @@ router.use(firebaseValidate).post("/auth", async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       return res.status(501).send("Server Error");
     });
 });
