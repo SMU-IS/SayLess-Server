@@ -29,10 +29,6 @@ const defaultRoutes = [
     route: questRoute,
   },
   {
-    path: "/user",
-    route: userRoute,
-  },
-  {
     path: "/chatroom",
     route: chatRoomRoute,
   },
@@ -46,6 +42,10 @@ const noSecurityRoutes = [
   {
     path: "/cred",
     route: authRoute,
+  },
+  {
+    path: "/user",
+    route: userRoute,
   },
   // {
   //   path: "/sample",

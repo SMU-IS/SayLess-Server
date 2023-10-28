@@ -55,7 +55,30 @@ router.post("/get-recipe", (req, res) => {
         params: queryParams,
       })
       .then((response) => {
-        // console.log('Response:', response.data);
+        res.json(response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        res.json(error);
+      });
+  } else {
+    res.status(404).send("Resource not found");
+  }
+});
+
+router.post("/recipe-prompt", (req, res) => {
+  const requestData = req.body;
+  const checkField = "searchQuery";
+  if (checkField in requestData) {
+    let queryParams = {
+      term: requestData[checkField],
+      lang: "en",
+    };
+    axios
+      .post("https://d1.supercook.com/dyn/dautoc", "", {
+        params: queryParams,
+      })
+      .then((response) => {
         res.json(response.data);
       })
       .catch((error) => {
