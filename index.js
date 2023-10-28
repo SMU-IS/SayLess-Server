@@ -23,20 +23,20 @@ const exitHandler = () => {
       if (socketServer) {
         socketServer.close(() => {
           console.log("Socket server closed");
-          process.exit(0); // Exit with a success code
+          process.exit(1); // Exit with a success code
         });
       } else {
-        process.exit(0); // No socket server to close, just exit with a success code
+        process.exit(1); // No socket server to close, just exit with a success code
       }
     });
   } else {
     if (socketServer) {
       socketServer.close(() => {
         console.log("Socket server closed");
-        process.exit(0); // Exit with a success code
+        process.exit(1); // Exit with a success code
       });
     } else {
-      process.exit(0); // No server or socket server to close, just exit with a success code
+      process.exit(1); // No server or socket server to close, just exit with a success code
     }
   }
 };
@@ -51,10 +51,12 @@ process.on("unhandledRejection", unexpectedErrorHandler);
 
 process.on("SIGTERM", () => {
   console.log("SIGTERM received");
-  exitHandler();
+  process.exit(0);
+  // exitHandler();
 });
 
 process.on("SIGINT", () => {
   console.log("Ctrl+C (SIGINT) received");
-  exitHandler();
+  process.exit(0);
+  // exitHandler();
 });
