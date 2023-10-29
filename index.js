@@ -2,8 +2,16 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const messageServer = require("./src/routes/message.route");
 const config = require("./src/config/config");
+// const fs = require("fs");
+// const https = require("https");
 let server;
 let socketServer;
+
+// // HTTPS configuration
+// const privateKey = fs.readFileSync("path/to/your/private-key.pem", "utf8");
+// const certificate = fs.readFileSync("path/to/your/certificate.pem", "utf8");
+// const credentials = { key: privateKey, cert: certificate };
+// const httpsServer = https.createServer(credentials, app);
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
   console.log("Connected to MongoDB");
