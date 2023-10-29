@@ -26,7 +26,33 @@ router.get("/get-chatrooms", async function (req, res) {
     },
     {
       $addFields: {
-        latest_msg: { $slice: ["$latest_msg", 1] },
+        latest_msg: { $slice: ["$latest_msg", -1] },
+      },
+    },
+    {
+      $lookup: {
+        from: "chats",
+        localField: "_id",
+        foreignField: "chatroomId",
+        as: "unread_msg",
+      },
+    },
+    {
+      $addFields: {
+        unread_msg: {
+          $filter: {
+            input: "$unread_msg",
+            as: "chat",
+            cond: {
+              $and: [
+                {
+                  $ne: ["$$chat.sender", new ObjectId(req.user._id)], // Replace with the specific sender_id
+                },
+                { $eq: ["$$chat.read", false] }, // Filter only unread messages
+              ],
+            },
+          },
+        },
       },
     },
   ])
@@ -34,27 +60,8 @@ router.get("/get-chatrooms", async function (req, res) {
       res.json(response);
     })
     .catch((err) => {
-      res.status(404).send("err");
+      res.status(404).send(err);
     });
-  // Chatroom.find(filter)
-  //   .populate("participants")
-  //   .populate("listing")
-  //   .then((response) => {
-  //     var resData = [];
-  //     response.forEach((element) => {
-  //       Chat.findOne({
-  //         chatroomId: element._id,
-  //       }).then((latestChatData) => {
-  //         if (latestChatData) {
-  //           element["latest_msg"] = latestChatData.message;
-  //           resData.push(element);
-  //           console.log(resData);
-  //         }
-  //       });
-  //     });
-  //     console.log(resData);
-  //     res.json(resData);
-  //   });
 });
 
 router.post("/create-chatrooms", async function (req, res) {
