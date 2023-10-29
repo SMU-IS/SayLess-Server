@@ -5,7 +5,9 @@ const { Listing } = require("../models");
 
 router.route("/get-listing").get(async function (req, res) {
   // Empty `filter` means "match all documents"
-  const filter = {};
+  const filter = {
+    isAvailable: true,
+  };
   await Listing.find()
     .populate("createdBy")
     .populate("requested")
@@ -50,6 +52,38 @@ router.post("/update-food-listings", async (req, res) => {
           data = await Listing.findOneAndUpdate(filter, req.body.updateInfo, {
             new: true, // Returns updated
           });
+          res.json(data);
+          return;
+        }
+        res.sendStatus(500);
+      });
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+router.post("/close-food-listings", async (req, res) => {
+  if (!req.body.listingId) {
+    res.sendStatus(500);
+    return;
+  }
+  // PROTECT
+  try {
+    filter = { _id: req.body.listingId, createdBy: req.user._id };
+    await Listing.findOne(filter)
+      .populate("createdBy")
+      .then(async (response) => {
+        let { createdBy } = response;
+        if (createdBy._id.toString() == req.user._id) {
+          data = await Listing.findOneAndUpdate(
+            filter,
+            {
+              isAvailable: false,
+            },
+            {
+              new: true, // Returns updated
+            }
+          );
           res.json(data);
           return;
         }
