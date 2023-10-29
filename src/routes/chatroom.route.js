@@ -18,6 +18,22 @@ router.get("/get-chatrooms", async function (req, res) {
     },
     {
       $lookup: {
+        from: "listings", // Replace 'listings' with the actual name of the referenced collection
+        localField: "listing",
+        foreignField: "_id",
+        as: "listing",
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Replace 'users' with the actual name of the referenced collection
+        localField: "participants",
+        foreignField: "_id",
+        as: "participants",
+      },
+    },
+    {
+      $lookup: {
         from: "chats",
         localField: "_id",
         foreignField: "chatroomId",
