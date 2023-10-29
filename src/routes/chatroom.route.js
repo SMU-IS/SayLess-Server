@@ -71,6 +71,78 @@ router.get("/get-chatrooms", async function (req, res) {
         },
       },
     },
+    // RESULT
+    {
+      $project: {
+        _id: 0, // Exclude the _id field for the chatroom document
+        id: "$_id", // Rename _id to id for the chatroom document
+        createdOn: 1, // Include createdOn field as is
+        __v: 1, // Include __v field as is
+        listing: {
+          $map: {
+            input: "$listing",
+            as: "listingItem",
+            in: {
+              id: "$$listingItem._id", // Rename _id to id within the listing array
+              listingImages: "$$listingItem.listingImages",
+              listingTitle: "$$listingItem.listingTitle",
+              listingDetails: "$$listingItem.listingDetails",
+              pickUpLocation: "$$listingItem.pickUpLocation",
+              requested: "$$listingItem.requested",
+              isAvailable: "$$listingItem.isAvailable",
+              createdOn: "$$listingItem.createdOn",
+              createdBy: "$$listingItem.createdBy",
+              __v: "$$listingItem.__v",
+            },
+          },
+        },
+        participants: {
+          $map: {
+            input: "$participants",
+            as: "participant",
+            in: {
+              id: "$$participant._id", // Rename _id to id within the participants array
+              userId: "$$participant.userId",
+              email: "$$participant.email",
+              name: "$$participant.name",
+              profilePic: "$$participant.profilePic",
+              createdOn: "$$participant.createdOn",
+              __v: "$$participant.__v",
+            },
+          },
+        },
+        latest_msg: {
+          $map: {
+            input: "$latest_msg",
+            as: "message",
+            in: {
+              id: "$$message._id", // Rename _id to id within the latest_msg array
+              chatroomId: "$$message.chatroomId",
+              createdOn: "$$message.createdOn",
+              sender: "$$message.sender",
+              message: "$$message.message",
+              read: "$$message.read",
+              __v: "$$message.__v",
+            },
+          },
+        },
+        unread_msg: {
+          $map: {
+            input: "$unread_msg",
+            as: "message",
+            in: {
+              id: "$$message._id", // Rename _id to id within the unread_msg array
+              chatroomId: "$$message.chatroomId",
+              createdOn: "$$message.createdOn",
+              sender: "$$message.sender",
+              message: "$$message.message",
+              read: "$$message.read",
+              __v: "$$message.__v",
+            },
+          },
+        },
+      },
+    },
   ])
     .then((response) => {
       res.json(response);
