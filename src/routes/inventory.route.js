@@ -80,4 +80,21 @@ router.post("/update-inventory", async function (req, res) {
     });
 });
 
+router.post("/delete-inventory", async function (req, res) {
+  if (!req.body.itemId) {
+    return res.status(501).send("inventory fields required");
+  }
+  let filter = {
+    _id: new ObjectId(req.body.itemId),
+    createdBy: new ObjectId(req.user._id), // Protect - only creator can edit
+  };
+  Inventory.findOneAndRemove(filter)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((err) => {
+      res.status(501).send("Error updaing");
+    });
+});
+
 module.exports = router;
