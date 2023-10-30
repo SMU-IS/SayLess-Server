@@ -9,9 +9,16 @@ const bodyParser = require("body-parser"); // Import body-parser
 const cookieParser = require("cookie-parser");
 // CUSTOM IMPORTS
 const apiRoutes = require("./src/routes/api"); // Import your API routes
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
 app.use(
   cors({
-    origin: "*",
+    origin: "https://sayless.netlify.app",
+    methods: "GET,POST",
+    allowedHeaders: "Content-Type, Authorization",
   })
 );
 
