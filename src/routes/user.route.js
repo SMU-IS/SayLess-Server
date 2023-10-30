@@ -6,6 +6,9 @@ const { generateAccessToken } = require("../utils/auth");
 const { firebaseValidate } = require("../middlewares/firebaseauth.middleware");
 const { verifyToken } = require("../middlewares/auth.middleware");
 
+const imageURL =
+  "https://i.kym-cdn.com/entries/icons/original/000/036/007/underthewatercover.jpg";
+
 // router.post("/get-user", async function (req, res) {
 //   // Empty `filter` means "match all documents"
 //   if (!req.user._id) {
@@ -59,8 +62,8 @@ async function createUser(req, res) {
   let postData = {
     userId: userData.userId,
     email: userData.email,
-    name: userData.name,
-    profilePic: userData.profilePic,
+    name: userData.name || userData.email.split("@")[0],
+    profilePic: userData.profilePic || imageURL,
   };
   postData["createdOn"] = new Date();
   userData = new User(postData);
