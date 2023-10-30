@@ -4,7 +4,7 @@ const ObjectId = require("mongodb").ObjectId;
 const axios = require("axios");
 const FormData = require("form-data");
 
-router.get("/scan-receipt", async (req, res) => {
+router.post("/scan-receipt", async (req, res) => {
   const base64UtfImage = req.body.image;
   const base64Image = base64UtfImage.replace(
     /^data:image\/[a-zA-Z+]+;base64,/,
