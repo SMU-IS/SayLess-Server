@@ -33,9 +33,11 @@ router.post("/scan-receipt", async (req, res) => {
   axios
     .post("https://api.edenai.run/v2/ocr/receipt_parser", formData, { headers })
     .then((response) => {
-      if (response.data.google) {
-        res.json(response.data.google.extracted_data); // Send the response to the client
-      }
+      console.log(response.data);
+      res.json(response.data);
+      //   if (response.data.google) {
+      //     res.json(response.data.google.extracted_data); // Send the response to the client
+      //   }
     })
     .catch((error) => {
       console.error(error);

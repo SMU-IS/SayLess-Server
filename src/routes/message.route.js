@@ -32,12 +32,17 @@ io.use(auth).on("connection", async (socket) => {
     let filter = {
       chatroomId: chatroom,
     };
-    socket.join(chatroom);
     Chat.find(filter)
       .populate("sender")
       .then((response) => {
-        socket.emit("messageData", response);
-        socket.to(chatroom).emit("roomStatus", "A user is connected");
+        if (response) {
+          socket.emit("messageData", response);
+          socket.join(chatroom);
+          socket.to(chatroom).emit("roomStatus", "A user is connected");
+        }
+      })
+      .catch((err) => {
+        console.log("room not found");
       });
   });
 
@@ -57,13 +62,16 @@ io.use(auth).on("connection", async (socket) => {
     let chatData = new Chat(postData);
     try {
       chatData.save().then((result) => {
+        console.log(result);
         Chat.find({
           _id: result._id,
         })
           .populate("sender")
           .then((updatedChat) => {
             io.to(chatroom).emit("messageData", updatedChat);
+            console.log("CHAT SAVED");
           });
+        console.log("Now handling noti");
         let filter = {
           _id: new ObjectId(chatroom),
         };
@@ -108,15 +116,23 @@ io.use(auth).on("connection", async (socket) => {
             },
           },
           // Continue with the rest of your aggregation stages
-        ]).then((result) => {
-          let notifyReceiver = result[0].participants[0]._id.toString(); // User on the receiveing end
-          io.to(notifyReceiver).emit("notiMessage", {
-            type: "message",
-            message: `you have received a new message from ${socket.user.name}`,
+        ])
+          .then((result) => {
+            console.log(result);
+            let notifyReceiver = result[0].participants[0]._id.toString(); // User on the receiveing end
+            console.log("Noti send to", notifyReceiver);
+            io.to(notifyReceiver).emit("notiMessage", {
+              type: "message",
+              message: `you have received a new message from ${socket.user.name}`,
+              chatroom: chatroom,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        });
       });
     } catch (err) {
+      console.log("Noti Err", err);
       socket.emit("error", "Message failed to send");
     }
   });
@@ -128,10 +144,6 @@ io.use(auth).on("connection", async (socket) => {
     // }
     let userDetails = socket.user._id.toString();
     socket.join(userDetails);
-    // io.to(userDetails).emit("notification", {
-    //   type: "message",
-    //   message: "you have a new message",
-    // });
   });
 
   socket.on("expiryNotification", () => {
@@ -141,11 +153,16 @@ io.use(auth).on("connection", async (socket) => {
     // }
     let userDetails = socket.user._id.toString();
     socket.join(userDetails);
-    // io.to(userDetails).emit("notification", {
-    //   type: "message",
-    //   message: "you have a new message",
-    // });
   });
+
+  // // FOR DEBUG
+  // socket.on("spam", ({ user }) => {
+  //   let notifyReceiver = user;
+  //   io.to(notifyReceiver).emit("notiMessage", {
+  //     type: "message",
+  //     message: `you have received a new message from ${socket.user.name}`,
+  //   });
+  // });
 });
 
 module.exports = server;
