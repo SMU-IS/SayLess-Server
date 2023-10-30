@@ -8,6 +8,7 @@ const userRoute = require("./user.route");
 const chatRoomRoute = require("./chatroom.route");
 const chatRoute = require("./chat.route");
 const inventoryRoute = require("./inventory.route");
+const fileRoute = require("./file.route");
 
 // SAMPLE DATA
 const sampleRoute = require("./sampledata.route");
@@ -51,6 +52,10 @@ const noSecurityRoutes = [
   {
     path: "/user",
     route: userRoute,
+  },
+  {
+    path: "/file",
+    route: fileRoute,
   },
   // {
   //   path: "/sample",
