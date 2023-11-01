@@ -42,20 +42,20 @@ const defaultRoutes = [
     path: "/inventory",
     route: inventoryRoute,
   },
-];
-
-const noSecurityRoutes = [
-  {
-    path: "/cred",
-    route: authRoute,
-  },
-  {
-    path: "/user",
-    route: userRoute,
-  },
   {
     path: "/file",
     route: fileRoute,
+  },
+];
+
+const noSecurityRoutes = [
+  // {
+  //   path: "/cred",
+  //   route: authRoute,
+  // },
+  {
+    path: "/user",
+    route: userRoute,
   },
   // {
   //   path: "/sample",
