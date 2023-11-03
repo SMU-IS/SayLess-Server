@@ -42,6 +42,10 @@ const defaultRoutes = [
     path: "/file",
     route: fileRoute,
   },
+  {
+    path: "/recipe",
+    route: recipeRoute,
+  },
 ];
 
 const noSecurityRoutes = [
@@ -49,10 +53,6 @@ const noSecurityRoutes = [
   //   path: "/cred",
   //   route: authRoute,
   // },
-  {
-    path: "/recipe",
-    route: recipeRoute,
-  },
   {
     path: "/user",
     route: userRoute,
