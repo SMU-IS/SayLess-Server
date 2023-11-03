@@ -76,6 +76,8 @@ Server Git Repo: `https://github.com/SMU-IS/SayLess-Server.git`
    npm run dev
    ```
 
+5. Project running on `localhost:5173` (default)
+
 ## To run the back-end app,
 
 Server is currently deployed on AWS EC2 Server

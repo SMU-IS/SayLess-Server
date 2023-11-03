@@ -23,10 +23,6 @@ const defaultRoutes = [
     route: listingRoute,
   },
   {
-    path: "/recipe",
-    route: recipeRoute,
-  },
-  {
     path: "/quest",
     route: questRoute,
   },
@@ -53,6 +49,10 @@ const noSecurityRoutes = [
   //   path: "/cred",
   //   route: authRoute,
   // },
+  {
+    path: "/recipe",
+    route: recipeRoute,
+  },
   {
     path: "/user",
     route: userRoute,
